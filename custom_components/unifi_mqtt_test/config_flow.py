@@ -33,7 +33,7 @@ DATA_SCHEMA = vol.Schema({
 })
 
 
-class UniFiMQTTTestConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for UniFi MQTT Test integration."""
 
     VERSION = 1
@@ -42,8 +42,7 @@ class UniFiMQTTTestConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """Handle the initial step."""
         errors = {}
         if user_input is not None:
-            # Here you might add connectivity tests, etc.
-            # For simplicity, we accept the data as valid.
+            # Optionally add connectivity or authentication tests here.
             return self.async_create_entry(title="UniFi MQTT Test", data=user_input)
 
         return self.async_show_form(
