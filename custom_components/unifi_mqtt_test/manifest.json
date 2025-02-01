@@ -1,0 +1,16 @@
+{
+  "domain": "unifi_mqtt_test",
+  "name": "UniFi MQTT Integration",
+  "version": "1.0.0",
+  "documentation": "https://github.com/ingoldsby/unifi_mqtt_test",
+  "dependencies": [
+    "mqtt"
+  ],
+  "requirements": [
+    "pyunifi",
+    "pandas"
+  ],
+  "codeowners": [
+    "@ingoldsby"
+  ]
+}
