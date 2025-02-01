@@ -1,7 +1,7 @@
 {
   "domain": "unifi_mqtt_test",
   "name": "UniFi MQTT Integration",
-  "version": "1.0.0",
+  "version": "1.0.6",
   "documentation": "https://github.com/ingoldsby/unifi_mqtt_test",
   "dependencies": [
     "mqtt"
