@@ -7,7 +7,7 @@ CONF_USERNAME = "username"
 CONF_PASSWORD = "password"
 CONF_SITE_ID = "site_id"
 CONF_PORT = "port"
-CONF_VERIFY_SSL = "verify_ssl"
+CONF_VERIFY_SSL = "Verify SSL"
 CONF_VERSION = "version"
 
 DEFAULT_SITE_ID = "default"
