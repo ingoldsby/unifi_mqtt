@@ -15,4 +15,4 @@ DEFAULT_PORT = 443
 DEFAULT_VERIFY_SSL = True
 DEFAULT_VERSION = "UDMP-unifiOS"
 
-UPDATE_INTERVAL = 300  # seconds (5 minutes)
+UPDATE_INTERVAL = 30  # seconds (30 seconds)
