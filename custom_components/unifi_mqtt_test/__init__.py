@@ -1,6 +1,5 @@
-...
 from datetime import timedelta
-...
+
 from .const import (
     DOMAIN,
     CONF_HOST,
@@ -12,7 +11,7 @@ from .const import (
     CONF_VERSION,
     UPDATE_INTERVAL,  # Now 30 seconds
 )
-...
+
     # Schedule the update function to run periodically.
     global UPDATE_LISTENER
     UPDATE_LISTENER = async_track_time_interval(
@@ -20,4 +19,3 @@ from .const import (
     )
     # Run an initial update immediately.
     hass.async_create_task(update_unifi_data(None))
-...
