@@ -1,4 +1,4 @@
-"""Constants for the UniFi MQTT integration."""
+"""Constants for the UniFi MQTT Test integration."""
 
 DOMAIN = "unifi_mqtt_test"
 
@@ -15,4 +15,5 @@ DEFAULT_PORT = 443
 DEFAULT_VERIFY_SSL = True
 DEFAULT_VERSION = "UDMP-unifiOS"
 
-UPDATE_INTERVAL = 30  # seconds (30 seconds)
+# Update interval is now 30 seconds instead of 5 minutes.
+UPDATE_INTERVAL = 30  # seconds
