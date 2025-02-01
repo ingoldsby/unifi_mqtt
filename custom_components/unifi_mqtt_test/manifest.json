@@ -12,5 +12,6 @@
   ],
   "codeowners": [
     "@ingoldsby"
-  ]
+  ],
+  "config_flow": true
 }
