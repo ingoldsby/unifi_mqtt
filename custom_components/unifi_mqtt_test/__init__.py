@@ -12,10 +12,11 @@ from .const import (
     UPDATE_INTERVAL,  # Now 30 seconds
 )
 
-    # Schedule the update function to run periodically.
-    global UPDATE_LISTENER
-    UPDATE_LISTENER = async_track_time_interval(
-        hass, update_unifi_data, timedelta(seconds=UPDATE_INTERVAL)
-    )
-    # Run an initial update immediately.
-    hass.async_create_task(update_unifi_data(None))
+# Schedule the update function to run periodically.
+global UPDATE_LISTENER
+UPDATE_LISTENER = async_track_time_interval(
+    hass, update_unifi_data, timedelta(seconds=UPDATE_INTERVAL)
+)
+
+# Run an initial update immediately.
+hass.async_create_task(update_unifi_data(None))
