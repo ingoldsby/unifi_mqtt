@@ -235,7 +235,7 @@ async def async_setup_entry(hass, entry):
                     "poe_power": port_power,
                 })
 
-            # Build MQTT topics and payloads using the "unifi_test" prefix.
+            # Build MQTT topics and payloads using the "unifi_mqtt_test" prefix.
             discovery_topic = f"homeassistant/sensor/unifi_mqtt_test/{sanitized_name}/config"
             sensor_payload = {
                 "name": name,
@@ -254,18 +254,18 @@ async def async_setup_entry(hass, entry):
             _LOGGER.info("Publishing discovery: Topic=%s, Payload=%s", discovery_topic, json.dumps(sensor_payload))
             await async_publish(hass, discovery_topic, json.dumps(sensor_payload), retain=True)
 
-            state_topic = f"unifi_test/devices/{sanitized_name}/state"
+            state_topic = f"unifi_mqtt_test/devices/{sanitized_name}/state"
             _LOGGER.info("Publishing state: Topic=%s, Payload=%s", state_topic, uptime)
             await async_publish(hass, state_topic, uptime, retain=True)
 
-            attributes_topic = f"unifi_test/devices/{sanitized_name}/attributes"
+            attributes_topic = f"unifi_mqtt_test/devices/{sanitized_name}/attributes"
             _LOGGER.info("Publishing attributes: Topic=%s, Payload=%s", attributes_topic, json.dumps(attributes))
             await async_publish(hass, attributes_topic, json.dumps(attributes), retain=True)
 
             active_devices.append(name)
 
         # Publish summary of active devices.
-        summary_topic = "unifi_test/devices/summary"
+        summary_topic = "unifi_mqtt_test/devices/summary"
         _LOGGER.info("Publishing summary: Topic=%s, Payload=%s", summary_topic, json.dumps(active_devices))
         await async_publish(hass, summary_topic, json.dumps(active_devices), retain=True)
 
