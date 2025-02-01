@@ -1,0 +1,51 @@
+"""Config flow for UniFi MQTT Test integration."""
+import logging
+import voluptuous as vol
+
+import homeassistant.helpers.config_validation as cv
+from homeassistant import config_entries
+
+from .const import (
+    DOMAIN,
+    CONF_HOST,
+    CONF_USERNAME,
+    CONF_PASSWORD,
+    CONF_SITE_ID,
+    CONF_PORT,
+    CONF_VERIFY_SSL,
+    CONF_VERSION,
+    DEFAULT_SITE_ID,
+    DEFAULT_PORT,
+    DEFAULT_VERIFY_SSL,
+    DEFAULT_VERSION,
+)
+
+_LOGGER = logging.getLogger(__name__)
+
+DATA_SCHEMA = vol.Schema({
+    vol.Required(CONF_HOST): cv.string,
+    vol.Required(CONF_USERNAME): cv.string,
+    vol.Required(CONF_PASSWORD): cv.string,
+    vol.Optional(CONF_SITE_ID, default=DEFAULT_SITE_ID): cv.string,
+    vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.port,
+    vol.Optional(CONF_VERIFY_SSL, default=DEFAULT_VERIFY_SSL): cv.boolean,
+    vol.Optional(CONF_VERSION, default=DEFAULT_VERSION): cv.string,
+})
+
+
+class UniFiMQTTTestConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+    """Handle a config flow for UniFi MQTT Test integration."""
+
+    VERSION = 1
+
+    async def async_step_user(self, user_input=None):
+        """Handle the initial step."""
+        errors = {}
+        if user_input is not None:
+            # Here you might add connectivity tests, etc.
+            # For simplicity, we accept the data as valid.
+            return self.async_create_entry(title="UniFi MQTT Test", data=user_input)
+
+        return self.async_show_form(
+            step_id="user", data_schema=DATA_SCHEMA, errors=errors
+        )
