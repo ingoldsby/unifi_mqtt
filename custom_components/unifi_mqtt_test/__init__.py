@@ -244,9 +244,11 @@ async def async_setup_entry(hass, entry):
                 "unique_id": mac.replace(":", ""),
                 "json_attributes_topic": f"unifi_mqtt_test/devices/{sanitized_name}/attributes",
                 "device": {
-                    "identifiers": [mac.replace(":", "")],
+                    "identifiers": [f"unifi_{mac.replace(':', '')}"],
+                    "name": name,
                     "manufacturer": "UniFi",
-                    "model": devs.get("model", "Unknown")
+                    "model": devs.get("model", "Unknown"),
+                    "sw_version": devs.get("version", "Unknown")
                 }
             }
 
