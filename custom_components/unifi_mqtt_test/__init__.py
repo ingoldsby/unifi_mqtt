@@ -4,7 +4,7 @@ Custom component that fetches UniFi device stats and publishes them via MQTT.
 This integration queries a UniFi controller for device statistics and publishes
 the data in three MQTT topics per device:
   • Discovery (for Home Assistant auto-discovery)
-  • State (here we publish uptime)
+  • State (publishing uptime)
   • Attributes (detailed stats)
 
 The update runs every 5 minutes.
@@ -58,7 +58,7 @@ CONFIG_SCHEMA = vol.Schema(
 
 
 async def async_setup(hass, config):
-    """Set up the UniFi MQTT integration."""
+    """Set up the UniFi MQTT Test integration."""
     conf = config.get(DOMAIN)
     if conf is None:
         _LOGGER.error("No configuration found for %s", DOMAIN)
@@ -94,7 +94,7 @@ async def async_setup(hass, config):
         active_devices = []
 
         for device in unifi_devices:
-            # Only process adopted devices
+            # Only process adopted devices.
             if not device.get("adopted"):
                 continue
 
@@ -110,16 +110,16 @@ async def async_setup(hass, config):
             device_type = devs.get("type", "Unknown")
             uptime_seconds = devs.get("uptime", 0)
 
-            # Sanitize the device name for use in MQTT topics
+            # Sanitize the device name for MQTT topics.
             sanitized_name = name.replace(" ", "_").replace(".", "_").lower()
 
-            # Format uptime
+            # Format uptime.
             days = uptime_seconds // 86400
             hours = (uptime_seconds % 86400) // 3600
             minutes = (uptime_seconds % 3600) // 60
             uptime = f"{days}d {hours}h {minutes}m"
 
-            # Base attributes common to all device types
+            # Base attributes common to all device types.
             attributes = {
                 "type": device_type,
                 "status": "On" if devs.get("state") == 1 else "Off",
@@ -140,7 +140,7 @@ async def async_setup(hass, config):
                 "device_name": name,
             }
 
-            # Process additional attributes based on device type
+            # Process additional attributes based on device type.
             if device_type == "usw":
                 port_status = {}
                 port_poe = {}
@@ -260,13 +260,14 @@ async def async_setup(hass, config):
                     "poe_power": port_power,
                 })
 
-            # Build MQTT topics and payloads for discovery, state and attributes
-            discovery_topic = f"homeassistant/sensor/{sanitized_name}/config"
+            # Build MQTT topics and payloads for discovery, state, and attributes.
+            # The topics have been updated to use "unifi_test" instead of "unifi".
+            discovery_topic = f"homeassistant/sensor/unifi_test/{sanitized_name}/config"
             sensor_payload = {
                 "name": name,
-                "state_topic": f"unifi/devices/{sanitized_name}/state",
+                "state_topic": f"unifi_test/devices/{sanitized_name}/state",
                 "unique_id": mac.replace(":", ""),
-                "json_attributes_topic": f"unifi/devices/{sanitized_name}/attributes",
+                "json_attributes_topic": f"unifi_test/devices/{sanitized_name}/attributes",
                 "device": {
                     "identifiers": [mac],
                     "name": name,
@@ -275,16 +276,16 @@ async def async_setup(hass, config):
             }
             await async_publish(hass, discovery_topic, json.dumps(sensor_payload), retain=True)
 
-            state_topic = f"unifi/devices/{sanitized_name}/state"
+            state_topic = f"unifi_test/devices/{sanitized_name}/state"
             await async_publish(hass, state_topic, uptime, retain=True)
 
-            attributes_topic = f"unifi/devices/{sanitized_name}/attributes"
+            attributes_topic = f"unifi_test/devices/{sanitized_name}/attributes"
             await async_publish(hass, attributes_topic, json.dumps(attributes), retain=True)
 
             active_devices.append(name)
 
-        # Publish a summary of active devices
-        summary_topic = "unifi/devices/summary"
+        # Publish a summary of active devices.
+        summary_topic = "unifi_test/devices/summary"
         await async_publish(hass, summary_topic, json.dumps(active_devices), retain=True)
 
     # Schedule the update function to run periodically.
