@@ -244,7 +244,6 @@ async def async_setup_entry(hass, entry):
                 "json_attributes_topic": f"unifi_test/devices/{sanitized_name}/attributes",
                 "device": {
                     "identifiers": [mac],
-                    "name": name,
                     "manufacturer": "UniFi"
                 }
             }
