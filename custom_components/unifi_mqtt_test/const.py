@@ -12,7 +12,7 @@ CONF_VERSION = "version"
 
 DEFAULT_SITE_ID = "default"
 DEFAULT_PORT = 443
-DEFAULT_VERIFY_SSL = True
+DEFAULT_VERIFY_SSL = False
 DEFAULT_VERSION = "UDMP-unifiOS"
 
 # Update interval is now 30 seconds instead of 5 minutes.
