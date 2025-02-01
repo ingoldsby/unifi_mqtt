@@ -7,7 +7,7 @@ the data in three MQTT topics per device:
   • State (publishing uptime)
   • Attributes (detailed stats)
 
-The update runs every 5 minutes.
+Data is updated every 5 minutes.
 """
 
 import asyncio
@@ -19,7 +19,6 @@ import pandas as pd
 import voluptuous as vol
 from pyunifi.controller import Controller
 
-import homeassistant.helpers.config_validation as cv
 from homeassistant.components.mqtt import async_publish
 from homeassistant.helpers.event import async_track_time_interval
 
@@ -32,45 +31,24 @@ from .const import (
     CONF_PORT,
     CONF_VERIFY_SSL,
     CONF_VERSION,
-    DEFAULT_SITE_ID,
-    DEFAULT_PORT,
-    DEFAULT_VERIFY_SSL,
-    DEFAULT_VERSION,
     UPDATE_INTERVAL,
 )
 
 _LOGGER = logging.getLogger(__name__)
 
-CONFIG_SCHEMA = vol.Schema(
-    {
-        DOMAIN: vol.Schema({
-            vol.Required(CONF_HOST): cv.string,
-            vol.Required(CONF_USERNAME): cv.string,
-            vol.Required(CONF_PASSWORD): cv.string,
-            vol.Optional(CONF_SITE_ID, default=DEFAULT_SITE_ID): cv.string,
-            vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.port,
-            vol.Optional(CONF_VERIFY_SSL, default=DEFAULT_VERIFY_SSL): cv.boolean,
-            vol.Optional(CONF_VERSION, default=DEFAULT_VERSION): cv.string,
-        })
-    },
-    extra=vol.ALLOW_EXTRA,
-)
+# Store our update listener so we can remove it on unload.
+UPDATE_LISTENER = None
 
 
-async def async_setup(hass, config):
-    """Set up the UniFi MQTT Test integration."""
-    conf = config.get(DOMAIN)
-    if conf is None:
-        _LOGGER.error("No configuration found for %s", DOMAIN)
-        return False
-
-    host = conf[CONF_HOST]
-    username = conf[CONF_USERNAME]
-    password = conf[CONF_PASSWORD]
-    site_id = conf[CONF_SITE_ID]
-    port = conf[CONF_PORT]
-    verify_ssl = conf[CONF_VERIFY_SSL]
-    version = conf[CONF_VERSION]
+async def async_setup_entry(hass, entry):
+    """Set up the UniFi MQTT Test integration from a config entry."""
+    host = entry.data[CONF_HOST]
+    username = entry.data[CONF_USERNAME]
+    password = entry.data[CONF_PASSWORD]
+    site_id = entry.data[CONF_SITE_ID]
+    port = entry.data[CONF_PORT]
+    verify_ssl = entry.data[CONF_VERIFY_SSL]
+    version = entry.data[CONF_VERSION]
 
     def init_controller():
         return Controller(
@@ -94,7 +72,6 @@ async def async_setup(hass, config):
         active_devices = []
 
         for device in unifi_devices:
-            # Only process adopted devices.
             if not device.get("adopted"):
                 continue
 
@@ -110,16 +87,13 @@ async def async_setup(hass, config):
             device_type = devs.get("type", "Unknown")
             uptime_seconds = devs.get("uptime", 0)
 
-            # Sanitize the device name for MQTT topics.
             sanitized_name = name.replace(" ", "_").replace(".", "_").lower()
 
-            # Format uptime.
             days = uptime_seconds // 86400
             hours = (uptime_seconds % 86400) // 3600
             minutes = (uptime_seconds % 3600) // 60
             uptime = f"{days}d {hours}h {minutes}m"
 
-            # Base attributes common to all device types.
             attributes = {
                 "type": device_type,
                 "status": "On" if devs.get("state") == 1 else "Off",
@@ -140,7 +114,6 @@ async def async_setup(hass, config):
                 "device_name": name,
             }
 
-            # Process additional attributes based on device type.
             if device_type == "usw":
                 port_status = {}
                 port_poe = {}
@@ -260,8 +233,7 @@ async def async_setup(hass, config):
                     "poe_power": port_power,
                 })
 
-            # Build MQTT topics and payloads for discovery, state, and attributes.
-            # The topics have been updated to use "unifi_test" instead of "unifi".
+            # Publish MQTT topics using the "unifi_test" prefix.
             discovery_topic = f"homeassistant/sensor/unifi_test/{sanitized_name}/config"
             sensor_payload = {
                 "name": name,
@@ -284,13 +256,25 @@ async def async_setup(hass, config):
 
             active_devices.append(name)
 
-        # Publish a summary of active devices.
+        # Publish summary of active devices.
         summary_topic = "unifi_test/devices/summary"
         await async_publish(hass, summary_topic, json.dumps(active_devices), retain=True)
 
     # Schedule the update function to run periodically.
-    async_track_time_interval(hass, update_unifi_data, timedelta(seconds=UPDATE_INTERVAL))
+    global UPDATE_LISTENER
+    UPDATE_LISTENER = async_track_time_interval(
+        hass, update_unifi_data, timedelta(seconds=UPDATE_INTERVAL)
+    )
     # Run an initial update immediately.
     hass.async_create_task(update_unifi_data(None))
 
+    return True
+
+
+async def async_unload_entry(hass, entry):
+    """Unload a config entry."""
+    global UPDATE_LISTENER
+    if UPDATE_LISTENER is not None:
+        UPDATE_LISTENER()
+        UPDATE_LISTENER = None
     return True
