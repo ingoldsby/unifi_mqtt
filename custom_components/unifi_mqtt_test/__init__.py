@@ -245,7 +245,8 @@ async def async_setup_entry(hass, entry):
                 "device": {
                     "identifiers": [mac],
                     "name": name,
-                    "manufacturer": "UniFi"
+                    "manufacturer": "UniFi",
+                    "model": devs.get("model", "Unknown")
                 }
             }
 
