@@ -97,13 +97,13 @@ async def async_setup_entry(hass, entry):
             # This will cause Home Assistant to concatenate them (e.g., "UAP NanoHD UAP NanoHD").
             # To have the friendly name display as just "UAP NanoHD", you must manually override
             # the entity’s friendly name in the Home Assistant entity registry after discovery.
-            discovery_topic = f"homeassistant/sensor/unifi_mqtt_test/{sanitized_name}/config"
+            discovery_topic = f"homeassistant/sensor/unifi_mqtt/{sanitized_name}/config"
             sensor_payload = {
                 "name": name,  # This is the sensor friendly name.
                 "object_id": sanitized_name, 
-                "state_topic": f"unifi_mqtt_test/devices/{sanitized_name}/state",
+                "state_topic": f"unifi_mqtt/devices/{sanitized_name}/state",
                 "unique_id": mac.replace(":", ""),
-                "json_attributes_topic": f"unifi_mqtt_test/devices/{sanitized_name}/attributes",
+                "json_attributes_topic": f"unifi_mqtt/devices/{sanitized_name}/attributes",
                 "device": {
                     "identifiers": [f"unifi_{mac.replace(':', '')}"],
                     "name": name, 
@@ -115,11 +115,11 @@ async def async_setup_entry(hass, entry):
             await async_publish(hass, discovery_topic, json.dumps(sensor_payload), retain=True)
 
             # Publish the sensor state.
-            state_topic = f"unifi_mqtt_test/devices/{sanitized_name}/state"
+            state_topic = f"unifi_mqtt/devices/{sanitized_name}/state"
             await async_publish(hass, state_topic, uptime, retain=True)
 
             # Publish sensor attributes.
-            attributes_topic = f"unifi_mqtt_test/devices/{sanitized_name}/attributes"
+            attributes_topic = f"unifi_mqtt/devices/{sanitized_name}/attributes"
             attributes = {
                 "type": device_type,
                 "status": "On" if devs.get("state") == 1 else "Off",
