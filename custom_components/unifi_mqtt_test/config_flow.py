@@ -14,6 +14,7 @@ from .const import (
     CONF_PORT,
     CONF_VERIFY_SSL,
     CONF_VERSION,
+    VERSION_OPTIONS,
     DEFAULT_SITE_ID,
     DEFAULT_PORT,
     DEFAULT_VERIFY_SSL,
@@ -29,7 +30,7 @@ DATA_SCHEMA = vol.Schema({
     vol.Optional(CONF_SITE_ID, default=DEFAULT_SITE_ID): cv.string,
     vol.Optional(CONF_PORT, default=DEFAULT_PORT): cv.port,
     vol.Optional(CONF_VERIFY_SSL, default=DEFAULT_VERIFY_SSL): cv.boolean,
-    vol.Optional(CONF_VERSION, default=DEFAULT_VERSION): cv.string,
+    vol.Optional(CONF_VERSION, default=DEFAULT_VERSION): vol.In(VERSION_OPTIONS),
 })
 
 class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
