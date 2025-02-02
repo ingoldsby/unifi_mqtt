@@ -10,6 +10,13 @@ CONF_PORT = "port"
 CONF_VERIFY_SSL = "Verify SSL"
 CONF_VERSION = "version"
 
+VERSION_OPTIONS = [
+    "UDMP-unifiOS",  # default
+    "v4",
+    "v5",
+    "unifiOS",
+]
+
 DEFAULT_SITE_ID = "default"
 DEFAULT_PORT = 443
 DEFAULT_VERIFY_SSL = False
