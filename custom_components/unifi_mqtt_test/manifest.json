@@ -1,8 +1,8 @@
 {
-  "domain": "unifi_mqtt_test",
+  "domain": "unifi_mqtt",
   "name": "UniFi MQTT Integration",
-  "version": "1.0.6",
-  "documentation": "https://github.com/ingoldsby/unifi_mqtt_test",
+  "version": "1.0.0",
+  "documentation": "https://github.com/w1tw0lf/Unifi-Device-info",
   "dependencies": [
     "mqtt"
   ],
@@ -11,7 +11,7 @@
     "pandas"
   ],
   "codeowners": [
-    "@ingoldsby"
+    "@w1tw0lf"
   ],
   "config_flow": true
 }
