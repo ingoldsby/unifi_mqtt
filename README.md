@@ -65,6 +65,13 @@ Ensure that your MQTT integration in Home Assistant is set up and that MQTT disc
 - [pyunifi](https://pypi.org/project/pyunifi/) Python package
 - [pandas](https://pandas.pydata.org/) Python package
 
+## Device and sensor naming
+
+Due to Home Assistant’s MQTT discovery behavior, if you supply both a sensor “name” and a device “name” that are identical, Home Assistant will concatenate them.
+For example, if both are "UAP NanoHD", the friendly name becomes "UAP NanoHD UAP NanoHD".
+There is currently no discovery parameter to disable this behavior.
+To have the friendly name display exactly as "UAP NanoHD", you must manually override the entity’s friendly name in the Home Assistant entity registry after discovery.
+
 ## Contributing
 
 Contributions are welcome! Feel free to open issues or submit pull requests to improve this integration.
