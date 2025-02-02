@@ -238,14 +238,14 @@ async def async_setup_entry(hass, entry):
             # Build MQTT topics and payloads using the "unifi_mqtt_test" prefix.
             discovery_topic = f"homeassistant/sensor/unifi_mqtt_test/{sanitized_name}/config"
             sensor_payload = {
-                "name": f"Unifi {name}",
+                "name": name,
                 "object_id": sanitized_name,
                 "state_topic": f"unifi_mqtt_test/devices/{sanitized_name}/state",
                 "unique_id": mac.replace(":", ""),
                 "json_attributes_topic": f"unifi_mqtt_test/devices/{sanitized_name}/attributes",
                 "device": {
                     "identifiers": [f"unifi_{mac.replace(':', '')}"],
-                    "name": name,
+                    "name": f"Unifi {name}",
                     "manufacturer": "UniFi",
                     "model": devs.get("model", "Unknown")
                 }
