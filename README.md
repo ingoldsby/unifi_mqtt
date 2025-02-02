@@ -1,16 +1,14 @@
-# UniFi MQTT Test Integration
+# UniFi MQTT Integration
 
 [![HACS Badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://hacs.xyz/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-The **UniFi MQTT Test Integration** is a custom Home Assistant integration that polls your UniFi controller every 30 seconds for device statistics and publishes the data via MQTT. The integration creates MQTT discovery messages so that sensors are automatically set up in Home Assistant.
-
-> **Note:** This integration is intended for testing purposes. Use with caution on production systems and adjust the update interval if necessary.
+The **UniFi MQTT Integration** is a custom Home Assistant integration that polls your UniFi controller every 60 seconds for device statistics and publishes the data via MQTT. The integration creates MQTT discovery messages so that sensors are automatically set up in Home Assistant.
 
 ## Features
 
 - **Automatic MQTT Discovery:** Publishes MQTT discovery messages for each device, allowing Home Assistant to automatically configure sensors.
-- **Frequent Updates:** Polls your UniFi controller every 30 seconds to update device status, uptime, and detailed attributes.
+- **Frequent Updates:** Polls your UniFi controller every 60 seconds to update device status, uptime, and detailed attributes.
 - **Support for Multiple Device Types:** Handles access points (uap), switches (usw), and UDM devices, publishing relevant attributes for each.
 - **UI-Based Configuration:** Configure the integration entirely through Home Assistant’s UI (no manual changes to `configuration.yaml` required).
 
@@ -21,8 +19,8 @@ There are two main ways to install the integration:
 ### 1. Manual Installation
 
 1. Download or clone this repository.
-2. Copy the entire `unifi_mqtt_test` folder into your Home Assistant `custom_components` directory:
-   - For Home Assistant OS or Home Assistant Container, this is typically under `/config/custom_components/unifi_mqtt_test/`.
+2. Copy the entire `unifi_mqtt` folder into your Home Assistant `custom_components` directory:
+   - For Home Assistant OS or Home Assistant Container, this is typically under `/config/custom_components/unifi_mqtt/`.
 3. Restart Home Assistant.
 
 ### 2. HACS Installation
@@ -38,7 +36,7 @@ If you use [HACS](https://hacs.xyz/):
 After installation, configure the integration via the Home Assistant UI:
 
 1. Go to **Settings > Devices & Services**.
-2. Click on **Add Integration** and search for **"UniFi MQTT Test"**.
+2. Click on **Add Integration** and search for **"UniFi MQTT"**.
 3. Fill in the required details:
    - **Host:** URL or IP address of your UniFi Controller.
    - **Username:** Controller username.
@@ -51,12 +49,12 @@ After installation, configure the integration via the Home Assistant UI:
 
 ## How It Works
 
-- **Data Polling:** The integration polls the UniFi controller every 30 seconds for device statistics using the `pyunifi` library.
+- **Data Polling:** The integration polls the UniFi controller every 60 seconds for device statistics using the `pyunifi` library.
 - **MQTT Publishing:** For each device, it publishes:
-  - A **discovery** message to `homeassistant/sensor/unifi_test/<sanitized_name>/config`
-  - A **state** message (showing uptime) to `unifi_test/devices/<sanitized_name>/state`
-  - An **attributes** message with detailed stats to `unifi_test/devices/<sanitized_name>/attributes`
-- A summary of active devices is published to `unifi_test/devices/summary`.
+  - A **discovery** message to `homeassistant/sensor/unifi/<sanitized_name>/config`
+  - A **state** message (showing uptime) to `unifi/devices/<sanitized_name>/state`
+  - An **attributes** message with detailed stats to `unifi/devices/<sanitized_name>/attributes`
+- A summary of active devices is published to `unifi/devices/summary`.
 
 Ensure that your MQTT integration in Home Assistant is set up and that MQTT discovery is enabled.
 
