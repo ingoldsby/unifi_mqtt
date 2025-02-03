@@ -1,6 +1,6 @@
 """Constants for the UniFi MQTT integration."""
 
-DOMAIN = "unifi_mqtt"
+DOMAIN = "unifi_mqtt_test"
 
 CONF_HOST = "host"
 CONF_USERNAME = "username"
