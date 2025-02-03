@@ -72,11 +72,6 @@ async def async_setup_entry(hass, entry):
         active_devices = []
 
         for device in unifi_devices:
-            # Check if the device is a dictionary; if not, log the value and skip it.
-            if not isinstance(device, dict):
-                _LOGGER.error("Received device that is not a dictionary: %s", device)
-                continue
-                
             if not device.get("adopted"):
                 continue
 
@@ -254,13 +249,13 @@ async def async_setup_entry(hass, entry):
                 })
 
             # Build MQTT discovery payload.
-            discovery_topic = f"homeassistant/sensor/unifi_mqtt_test/{sanitized_name}/config"
+            discovery_topic = f"homeassistant/sensor/unifi_mqtt/{sanitized_name}/config"
             sensor_payload = {
                 "name": name,
                 "object_id": sanitized_name,
-                "state_topic": f"unifi_mqtt_test/devices/{sanitized_name}/state",
+                "state_topic": f"unifi_mqtt/devices/{sanitized_name}/state",
                 "unique_id": mac.replace(":", ""),
-                "json_attributes_topic": f"unifi_mqtt_test/devices/{sanitized_name}/attributes",
+                "json_attributes_topic": f"unifi_mqtt/devices/{sanitized_name}/attributes",
                 "device": {
                     "identifiers": [f"unifi_{mac.replace(':', '')}"],
                     "name": name,
@@ -272,17 +267,17 @@ async def async_setup_entry(hass, entry):
             await async_publish(hass, discovery_topic, json.dumps(sensor_payload), retain=True)
 
             # Publish device state (uptime)
-            state_topic = f"unifi_mqtt_test/devices/{sanitized_name}/state"
+            state_topic = f"unifi_mqtt/devices/{sanitized_name}/state"
             await async_publish(hass, state_topic, uptime, retain=True)
 
             # Publish device attributes
-            attributes_topic = f"unifi_mqtt_test/devices/{sanitized_name}/attributes"
+            attributes_topic = f"unifi_mqtt/devices/{sanitized_name}/attributes"
             await async_publish(hass, attributes_topic, json.dumps(attributes), retain=True)
 
             active_devices.append(name)
 
         # Publish device summary
-        device_summary_topic = "unifi_mqtt_test/devices/summary"
+        device_summary_topic = "unifi_mqtt/devices/summary"
         await async_publish(hass, device_summary_topic, json.dumps(active_devices), retain=True)
 
     global UPDATE_LISTENER
