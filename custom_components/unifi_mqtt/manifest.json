@@ -2,7 +2,7 @@
   "domain": "unifi_mqtt",
   "name": "UniFi MQTT Integration",
   "version": "1.0.0",
-  "documentation": "https://github.com/w1tw0lf/Unifi-Device-info",
+  "documentation": "https://github.com/ingoldsby/unifi_mqtt",
   "dependencies": [
     "mqtt"
   ],
@@ -11,7 +11,7 @@
     "pandas"
   ],
   "codeowners": [
-    "@w1tw0lf"
+    "@ingoldsby"
   ],
   "config_flow": true
 }
