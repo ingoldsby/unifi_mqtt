@@ -49,6 +49,7 @@ async def async_setup_entry(hass, entry):
     port = entry.data[CONF_PORT]
     verify_ssl = entry.data[CONF_VERIFY_SSL]
     version = entry.data[CONF_VERSION]
+    update_interval = entry.data.get(CONF_UPDATE_INTERVAL, UPDATE_INTERVAL)
 
     def init_controller():
         return Controller(
