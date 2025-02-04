@@ -32,7 +32,7 @@ from .const import (
     CONF_PORT,
     CONF_VERIFY_SSL,
     CONF_VERSION,
-    UPDATE_INTERVAL,
+    CONF_UPDATE_INTERVAL,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -282,7 +282,7 @@ async def async_setup_entry(hass, entry):
 
     global UPDATE_LISTENER
     UPDATE_LISTENER = async_track_time_interval(
-        hass, update_unifi_data, timedelta(seconds=UPDATE_INTERVAL)
+        hass, update_unifi_data, timedelta(seconds=CONF_UPDATE_INTERVAL)
     )
     hass.async_create_task(update_unifi_data(None))
 
