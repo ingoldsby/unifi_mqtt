@@ -1,5 +1,5 @@
 {
-  "domain": "unifi_mqtt",
+  "domain": "unifi_mqtt_test",
   "name": "UniFi Device Info Integration",
   "version": "1.0.0",
   "documentation": "https://github.com/w1tw0lf/Unifi-Device-info",
