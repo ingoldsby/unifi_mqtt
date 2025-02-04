@@ -42,6 +42,7 @@ _LOGGER = logging.getLogger(__name__)
 UPDATE_LISTENER = None
 
 async def async_setup_entry(hass, entry):
+    _LOGGER.error("Setting up integration ...")
     """Set up the UniFi MQTT integration from a config entry."""
     host = entry.data[CONF_HOST]
     username = entry.data[CONF_USERNAME]
