@@ -1,4 +1,4 @@
-# UniFi MQTT Integration
+# UniFi MQTT Test Integration
 
 [![HACS Badge](https://img.shields.io/badge/HACS-Default-orange.svg)](https://hacs.xyz/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
