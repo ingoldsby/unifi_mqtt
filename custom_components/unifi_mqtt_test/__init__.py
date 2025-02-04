@@ -284,7 +284,7 @@ async def async_setup_entry(hass, entry):
 
     global UPDATE_LISTENER
     UPDATE_LISTENER = async_track_time_interval(
-        hass, update_unifi_data, timedelta(seconds=CONF_UPDATE_INTERVAL)
+        hass, update_unifi_data, timedelta(seconds=update_interval)
     )
     hass.async_create_task(update_unifi_data(None))
 
