@@ -23,6 +23,8 @@ from pyunifi.controller import Controller
 from homeassistant.components.mqtt import async_publish
 from homeassistant.helpers.event import async_track_time_interval
 
+from .options_flow import OptionsFlowHandler
+
 from .const import (
     DOMAIN,
     CONF_HOST,
@@ -40,6 +42,10 @@ _LOGGER = logging.getLogger(__name__)
 
 # Global variable for the update listener.
 UPDATE_LISTENER = None
+
+async def async_get_options_flow(config_entry):
+    """Return the options flow for UniFi MQTT Integration."""
+    return OptionsFlowHandler(config_entry)
 
 async def async_setup_entry(hass, entry):
     _LOGGER.error("Setting up integration ...")
